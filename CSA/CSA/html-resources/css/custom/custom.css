@@ -1,0 +1,42 @@
+﻿html,
+body {
+    width: 100%;
+    height: 100%;
+    clip: auto;
+    position: absolute;
+    overflow: hidden;
+}
+
+.container-fluid {
+    height: 100%;
+}
+
+.image {
+    object-fit: contain;
+    height: 100%;
+    width: 100%;
+}
+
+ol.carousel-indicators li {
+    background-color: rgba(128, 128, 128, 0.5);
+}
+
+ol.carousel-indicators li.active {
+    background-color: rgb(128, 128, 128);
+}
+.pull-right{ 
+    float: right!important;
+}
+.btn{
+    margin:2px;
+}
+.green{
+    color: green;
+}
+.red{
+    color:red;
+}
+
+.carousel-item .carousel-caption {
+    background-color: rgba(0,0,0,0.5);
+}

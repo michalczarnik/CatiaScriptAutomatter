@@ -1,0 +1,218 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <!-- Required js and css files -->
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/bootstrap-switch.css" />
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/angular.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap-switch.js"></script>
+    <!-- Custom js and css files -->
+    <script src="../js/custom/app.module.js"></script>
+    <script src="../js/custom/controller.module.js"></script>
+    <script src="../js/custom/services.module.js"></script>
+    <script src="../js/custom/directives.module.js"></script>
+    <link rel="stylesheet" href="../css/custom/custom.css" />
+</head>
+
+<body>
+    <div class="container-fluid" ng-app="pluginApplication" ng-controller="pluginController" ng-init="init()">
+        <!-- Header -->
+        <div class="row" style="height:5%; top:1%;">
+            <div class="col-sm-8">
+                <button class="btn btn-outline-secondary" ng-click="loadMacros()">Load Macros</button>
+                <button class="btn btn-outline-secondary" ng-disabled="!catiaStarted || macros.length==0" ng-click="runAll(0)">Run All Macros</button>
+                <button class="btn btn-outline-secondary" ng-disabled="!catiaStarted && macros.length==0" ng-click="showRunSelectedModal()">Run Selected</button>
+                <buton class="btn btn-outline-secondary" onclick="exposedClass.showDevTools()">Show Dev Tools</buton>
+            </div>
+            
+            <div class="col-sm-4">
+                <h2 class="pull-right" style="padding-left:5px;" ng-class="{green: catiaStarted, red:!catiaStarted}">{{catiaStarted?'ON':'OFF'}}</h2>
+                <h2 class="pull-right" style="padding-left:5px;">Catia Status:</h2>
+                <button type="button" class="btn btn-danger pull-right" onclick="exposedClass.largeWindow()">L</button>
+                <button type="button" class="btn btn-warning pull-right" onclick="exposedClass.mediumWindow()">M</button>
+                <button type="button" class="btn btn-info pull-right" onclick="exposedClass.smallWindow()">S</button>
+                <h2 class="pull-right">Size:</h2>
+            </div>
+        </div>
+            
+
+
+        <!-- Body -->
+        <div class="row" style="height:94%">
+            <div class="col-sm-4" style="height: 100%; overflow-y: scroll;">
+
+                <div class="accordion">
+                    <!-- Run Selected Modal-->
+                    <div class="modal fade" id="runSelected" tabindex="-1" role="dialog" aria-labelledby="Warning" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Select macros before continuing!</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <h5>Please select from which macro to which macro you want to run.</h5>
+                                    <h6>Select with your left mouse click, click again to deselect. Selecting for example 1st and 7th macro will select all macros in between.</h6>
+                                    <div class="card-header" id="{{macro.UniqueID}}header" ng-repeat="macro in macros">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-block" ng-class="macro.isSelected ? 'btn-success' : 'btn-outline-secondary'" ng-click="selectMacroInRunAll(macro)">
+                                                {{macro.FileName.replace(".CATScript", "")}}
+                                            </button>
+                                        </h5>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-outline-secondary" ng-disabled="!catiaStarted && macros.length==0" ng-click="startRunSelected(true)">Run Selected Macros</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Run Selected Modal-->
+                    <div class="modal fade" id="errorMessage" tabindex="-1" role="dialog" aria-labelledby="Warning" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Error!</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <h5>{{errorMessage}}</h5>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-outline-secondary" ng-click="closeErrorModal()">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Single Macro -->
+                    <div class="card" ng-repeat="macro in macros">
+                        <!-- Modal -->
+                        <div class="modal fade warning-modal" id="warning{{macro.UniqueID}}" tabindex="-1" role="dialog" aria-labelledby="Warning" aria-hidden="true" ng-if="macro.Warnings!=null">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Please check before continuing!</h5>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div id="{{macro.UniqueID}}warning" class="carousel slide h-100" data-ride="carousel" data-interval="false">
+                                            <!-- Macro Body -->
+                                            <ol class="carousel-indicators" ng-show="macro.Warnings.WarningList.length>1">
+                                                <li data-target="#{{macro.UniqueID}}warning" data-slide-to="{{$index}}" ng-class="{active: $index==0}" ng-repeat="warning in macro.Warnings.WarningList"></li>
+                                            </ol>
+                                            <div class="carousel-inner h-100">
+
+                                                <div class="carousel-item h-100" ng-class="{active: $index==0}" ng-repeat="warning in macro.Warnings.WarningList">
+                                                    <img class="d-block image" src="{{macro.DirectoryName}}/{{warning.WarningImagePath}}"
+                                                         alt="{{$index}} slide">
+                                                    <div class="carousel-caption d-none d-md-block">
+                                                        <h5>{{warning.WarningText}}</h5>
+                                                    </div>
+
+
+                                                </div>
+
+                                            </div>
+                                            <a class="carousel-control-prev" href="#{{macro.UniqueID}}warning" role="button" data-slide="prev" ng-if="macro.Warnings.WarningList.length>1">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="sr-only">Previous</span>
+                                            </a>
+                                            <a class="carousel-control-next" href="#{{macro.UniqueID}}warning" role="button" data-slide="next" ng-if="macro.Warnings.WarningList.length>1">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="sr-only">Next</span>
+                                            </a>
+                                        </div>
+
+                                        <!--<img class="d-block image" src="{{macro.DirectoryName}}/{{macro.Warning.WarningImagePath}}" />
+    <div class="carousel-caption d-none d-md-block">
+        <h5>{{macro.Warning.WarningText}}</h5>
+    </div>-->
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="runMacro(macro)" ng-if="!isRunAll && !isRunSelected">Done</button>
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="runAllModal($index)" ng-if="isRunAll">Continue</button>
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="continueRunSelected($index)" ng-if="isRunSelected">Continue</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Macro Header (name)-->
+                        <div class="card-header" id="{{macro.UniqueID}}header">
+                            <h5 class="mb-0">
+                                <button class="btn btn-block" data-toggle="collapse" data-target="#{{macro.UniqueID}}input" ng-class="currentMacro==macro.UniqueID ? 'btn-success' : 'btn-outline-secondary'"
+                                        aria-expanded="true" aria-controls="collapseOne" ng-click="selectMacro(macro.UniqueID)">
+                                    {{macro.FileName.replace(".CATScript", "")}}
+                                </button>
+                            </h5>
+                        </div>
+
+                        <!-- Macro body (inputs) -->
+                        <div id="{{macro.UniqueID}}input" class="collapse" aria-labelledby="{{macro.UniqueID}}header" data-parent="#accordion">
+                            <div class="card-body">
+
+                                <!-- Macro Paramter -->
+                                <div class="input-group mb-3" ng-repeat="parameter in macro.ParameterList">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-default">{{parameter.DisplayName}}</span>
+                                    </div>
+                                    <input type="text" value="{{parameter.DefaultValue}}" class="form-control" ng-if="parameter.Type==='String'"
+                                           aria-label="Default" aria-describedby="inputGroup-sizing-default" ng-model="parameter.DefaultValue">
+                                    <input type="number" step="{{parameter.Type=='Double'?'Any':'1'}}" value="{{parameter.DefaultValue}}" ng-if="parameter.Type!='String'"
+                                           class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" ng-model="parameter.DefaultValue" string-to-number>
+                                </div>
+
+                                <!-- Run macro button-->
+                                <div class="col-sm-12">
+                                    <button class="btn btn-outline-dark btn-block" ng-disabled="!catiaStarted" ng-click="runMacro(macro)" ng-if="macro.Warnings===null">Run Macro</button>
+                                    <button class="btn btn-outline-dark btn-block" ng-disabled="!catiaStarted" ng-click="showModal(macro)" ng-if="macro.Warnings!==null">Run Macro</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-sm-8 h-100">
+                <div id="{{macro.UniqueID}}images" class="carousel slide h-100" data-ride="carousel" data-interval="false" ng-repeat="macro in macros" ng-show="macro.UniqueID===selectedMacro">
+                    <!-- Macro Body -->
+                    <ol class="carousel-indicators" ng-show="macro.ImagesModel.length>1">
+                        <li data-target="#{{macro.UniqueID}}images" data-slide-to="{{$index}}" ng-class="{active: $index==0}" ng-repeat="image in macro.ImagesModel"></li>
+                    </ol>
+                    <div class="carousel-inner h-100">
+
+                        <div class="carousel-item h-100" ng-class="{active: $index==0}" ng-repeat="image in macro.ImagesModel">
+                            <img class="d-block image" src="{{macro.DirectoryName}}/{{image.Path}}"
+                                 alt="{{$index}} slide">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>{{image.Name}}</h5>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                    <a class="carousel-control-prev" href="#{{macro.UniqueID}}images" role="button" data-slide="prev" ng-if="macro.ImagesModel.length>1">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#{{macro.UniqueID}}images" role="button" data-slide="next" ng-if="macro.ImagesModel.length>1">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
