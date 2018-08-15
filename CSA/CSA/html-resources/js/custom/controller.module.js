@@ -8,6 +8,8 @@
     $scope.currentMacro = "";
     $scope.macrosQueue = [];
     $scope.errorMessage = "";
+    $scope.isWatchOperationInProgress = false;
+    $scope.sharedVaraiables = {};
 
     $scope.init = function () {
         $interval(function () {
@@ -139,6 +141,32 @@
     $scope.loadMacros = function () {
         $scope.macros = macroService.getAllMacros();
         $scope.populateImageModel();
+        $scope.populateWatches();
+    }
+
+    $scope.populateWatches = function () {
+        for (let i = 0; i < $scope.macros.length; i++) {
+            for (let j = 0; j < $scope.macros[i].ParameterList.length; j++) {
+                var parameter = $scope.macros[i].ParameterList[j];
+                if (parameter.IsSharedInContext) {
+                    if (!$scope.sharedVaraiables[parameter.ParameterName]) 
+                        $scope.sharedVaraiables[parameter.ParameterName] = [];
+                    $scope.sharedVaraiables[parameter.ParameterName].push({ macroIndex: i, parameterIndex: j });
+                    $scope.$watch('macros[' + i + '].ParameterList[' + j + ']', function (newVal, oldVal) {
+                        if (!$scope.isWatchOperationInProgress && newVal && newVal.DefaultValue !== oldVal.DefaultValue) {
+                            $scope.isWatchOperationInProgress = true;
+                            let name = newVal.ParameterName;
+                            let newValue = newVal.DefaultValue;
+                            let parameters = $scope.sharedVaraiables[name];
+                            for (let k = 0; k < parameters.length; k++) {
+                                $scope.macros[parameters[k].macroIndex].ParameterList[parameters[k].parameterIndex].DefaultValue = newValue;
+                            }
+                            $scope.isWatchOperationInProgres = false;
+                        }
+                    }, true);
+                }
+            }
+        }        
     }
 
     $scope.selectMacro = function (id) {
@@ -181,6 +209,11 @@
             if (macroInformation.Warnings==null)
                 alert("Selected script is finished!");
         }
+    }
+
+    $scope.selectFile = function (macroIndex, paramIndex) {
+        var path = exposedClass.openFile();
+        $scope.macros[macroIndex].ParameterList[paramIndex].DefaultValue = path;
     }
 
     $scope.showError = function (message) {

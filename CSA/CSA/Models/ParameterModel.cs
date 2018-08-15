@@ -7,5 +7,6 @@ namespace CSA.Models
         public string Type { get; internal set; }
         public string DisplayName { get; internal set; }
         public string DefaultValue { get; internal set; }
+        public bool IsSharedInContext { get; set; } = false;
     }
 }

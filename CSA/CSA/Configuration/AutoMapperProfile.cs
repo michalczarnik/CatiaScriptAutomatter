@@ -31,7 +31,8 @@ namespace CSA.Configuration
                 .ForMember(d => d.ParameterName, s => s.MapFrom(x => x.ParameterScriptName))
                 .ForMember(d => d.DisplayName, s => s.MapFrom(x => x.ParameterDisplayName))
                 .ForMember(d => d.Type, s => s.MapFrom(x => x.ParameterType))
-                .ForMember(d => d.DefaultValue, s => s.MapFrom(x => x.ParameterDefaultValue));
+                .ForMember(d => d.DefaultValue, s => s.MapFrom(x => x.ParameterDefaultValue))
+                .ForMember(d => d.IsSharedInContext, s => s.MapFrom(x => x.ParameterIsSharedInContext));
 
             cfg.CreateMap<Images, Dictionary<string, string>>()
                     .ConvertUsing(source => source.CreateDictionaryFromImages());

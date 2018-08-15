@@ -14,6 +14,8 @@ namespace CSA.Models.DTO
         public string ParameterType { get; set; }
         [XmlElement(ElementName = "parameterDefaultValue")]
         public string ParameterDefaultValue { get; set; }
+        [XmlElement(ElementName = "parameterIsSharedInContext")]
+        public bool ParameterIsSharedInContext { get; set; }
     }
 
     [XmlRoot(ElementName = "parameters")]

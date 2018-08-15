@@ -20,7 +20,7 @@ namespace CSA.Services.Static
             }
         }
 
-        public static void OpenFileDialog()
+        public static void OpenFolderDialog()
         {
             using(var fbd = new FolderBrowserDialog())
             {
@@ -39,6 +39,29 @@ namespace CSA.Services.Static
                 thread.Join();
             }
             
+        }
+
+        public static string OpenFileDialog()
+        {
+            var path = string.Empty;
+            using(var ofd = new OpenFileDialog())
+            {
+                var thread = new Thread((ThreadStart)(() =>
+                {
+                    ofd.Filter = "All Files (*.*)|*.*|Catia Part (*.CatPart)|*.CATPart";
+                    ofd.FilterIndex = 2;
+                    ofd.Multiselect = false;
+                    if (ofd.ShowDialog() == DialogResult.OK)
+                    {
+                        path = ofd.FileName;
+                    }
+                }));
+
+                thread.SetApartmentState(ApartmentState.STA);
+                thread.Start();
+                thread.Join();
+            }
+            return path;
         }
 
         public static void ChangeSize(ScreenSize size)

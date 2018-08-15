@@ -35,11 +35,16 @@ namespace CSA
 
         public string loadMacros(bool isXml = true)
         {
-            WinFormsService.OpenFileDialog();
+            WinFormsService.OpenFolderDialog();
             if (string.IsNullOrWhiteSpace(WinFormsService.PathToDirectory))
                 return null;
             FileService.PopulateMacros(WinFormsService.PathToDirectory, isXml);
             return JsonConvert.SerializeObject(StaticMacroList.ListOfMacros);
+        }
+
+        public string openFile()
+        {
+            return WinFormsService.OpenFileDialog();
         }
 
         public string runMacro(string responseModel)

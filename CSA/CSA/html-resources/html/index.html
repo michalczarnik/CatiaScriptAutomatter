@@ -16,6 +16,7 @@
     <script src="../js/custom/controller.module.js"></script>
     <script src="../js/custom/services.module.js"></script>
     <script src="../js/custom/directives.module.js"></script>
+    <script src="../js/custom/filters.module.js"></script>
     <link rel="stylesheet" href="../css/custom/custom.css" />
 </head>
 
@@ -159,13 +160,17 @@
 
                                 <!-- Macro Paramter -->
                                 <div class="input-group mb-3" ng-repeat="parameter in macro.ParameterList">
-                                    <div class="input-group-prepend">
+                                    <div class="input-group-prepend" ng-if="parameter.Type != 'File'">
                                         <span class="input-group-text" id="inputGroup-sizing-default">{{parameter.DisplayName}}</span>
                                     </div>
                                     <input type="text" value="{{parameter.DefaultValue}}" class="form-control" ng-if="parameter.Type==='String'"
                                            aria-label="Default" aria-describedby="inputGroup-sizing-default" ng-model="parameter.DefaultValue">
-                                    <input type="number" step="{{parameter.Type=='Double'?'Any':'1'}}" value="{{parameter.DefaultValue}}" ng-if="parameter.Type!='String'"
+                                    <input type="number" step="{{parameter.Type=='Double'?'Any':'1'}}" value="{{parameter.DefaultValue}}" ng-if="parameter.Type!='String' && parameter.Type!='File'"
                                            class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" ng-model="parameter.DefaultValue" string-to-number>
+
+                                    <button class="button-file-select" ng-if="parameter.Type==='File'" ng-click="selectFile($parent.$parent.$index, $index)">{{parameter.DisplayName}}</button>
+                                    <input type="text" value="{{ parameter.DefaultValue | returnName}}" class="form-control" ng-if="parameter.Type==='File'"
+                                           aria-label="Default" aria-describedby="inputGroup-sizing-default" disabled>
                                 </div>
 
                                 <!-- Run macro button-->
