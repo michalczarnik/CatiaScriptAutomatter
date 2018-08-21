@@ -48,7 +48,7 @@ namespace CSA.Services.Static
             {
                 var thread = new Thread((ThreadStart)(() =>
                 {
-                    ofd.Filter = "All Files (*.*)|*.*|Catia Part (*.CatPart)|*.CATPart";
+                    ofd.Filter = "All Files (*.*)|*.*|STEP File (*.stp)|*.stp";
                     ofd.FilterIndex = 2;
                     ofd.Multiselect = false;
                     if (ofd.ShowDialog() == DialogResult.OK)

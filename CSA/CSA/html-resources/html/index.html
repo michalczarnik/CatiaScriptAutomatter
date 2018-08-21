@@ -23,21 +23,21 @@
 <body>
     <div class="container-fluid" ng-app="pluginApplication" ng-controller="pluginController" ng-init="init()">
         <!-- Header -->
-        <div class="row" style="height:5%; top:1%;">
-            <div class="col-sm-8">
-                <button class="btn btn-outline-secondary" ng-click="loadMacros()">Load Macros</button>
-                <button class="btn btn-outline-secondary" ng-disabled="!catiaStarted || macros.length==0" ng-click="runAll(0)">Run All Macros</button>
-                <button class="btn btn-outline-secondary" ng-disabled="!catiaStarted && macros.length==0" ng-click="showRunSelectedModal()">Run Selected</button>
+        <div class="row" style="top:1%;">
+            <div class="col-sm-6">
+                <button class="btn btn-outline-secondary" ng-click="loadMacros()">Załaduj makra</button>
+                <button class="btn btn-outline-secondary" ng-disabled="!catiaStarted || macros.length==0" ng-click="runAll(0)">Uruchom wszystkie makra</button>
+                <button class="btn btn-outline-secondary" ng-disabled="!catiaStarted && macros.length==0" ng-click="showRunSelectedModal()">Urucham wybrane makra</button>
                 <buton class="btn btn-outline-secondary" onclick="exposedClass.showDevTools()">Show Dev Tools</buton>
             </div>
             
-            <div class="col-sm-4">
+            <div class="col-sm-6">
                 <h2 class="pull-right" style="padding-left:5px;" ng-class="{green: catiaStarted, red:!catiaStarted}">{{catiaStarted?'ON':'OFF'}}</h2>
-                <h2 class="pull-right" style="padding-left:5px;">Catia Status:</h2>
+                <h2 class="pull-right" style="padding-left:5px;">Status Catii:</h2>
                 <button type="button" class="btn btn-danger pull-right" onclick="exposedClass.largeWindow()">L</button>
                 <button type="button" class="btn btn-warning pull-right" onclick="exposedClass.mediumWindow()">M</button>
                 <button type="button" class="btn btn-info pull-right" onclick="exposedClass.smallWindow()">S</button>
-                <h2 class="pull-right">Size:</h2>
+                <h2 class="pull-right">Wielkość:</h2>
             </div>
         </div>
             
@@ -53,11 +53,11 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Select macros before continuing!</h5>
+                                    <h5 class="modal-title">Wybierz makra zanim pójdziesz dalej!</h5>
                                 </div>
                                 <div class="modal-body">
-                                    <h5>Please select from which macro to which macro you want to run.</h5>
-                                    <h6>Select with your left mouse click, click again to deselect. Selecting for example 1st and 7th macro will select all macros in between.</h6>
+                                    <h5>Proszę wybrać makro/makra które chcesz uruchomić.</h5>
+                                    <h6>Kliknij lewym przyciskiem myszy aby wybrać makro. Kliknij w to samo makro ponownie aby je odznaczyć. Jeżeli klikniesz np. 1 i 7 makro, wybrane zostaną wszystkie pomiędzy.</h6>
                                     <div class="card-header" id="{{macro.UniqueID}}header" ng-repeat="macro in macros">
                                         <h5 class="mb-0">
                                             <button class="btn btn-block" ng-class="macro.isSelected ? 'btn-success' : 'btn-outline-secondary'" ng-click="selectMacroInRunAll(macro)">
@@ -67,7 +67,7 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button class="btn btn-outline-secondary" ng-disabled="!catiaStarted && macros.length==0" ng-click="startRunSelected(true)">Run Selected Macros</button>
+                                    <button class="btn btn-outline-secondary" ng-disabled="!catiaStarted && macros.length==0" ng-click="startRunSelected(true)">Uruchom wybrane makra</button>
                                 </div>
                             </div>
                         </div>
@@ -78,13 +78,13 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title">Error!</h5>
+                                    <h5 class="modal-title">Błąd!</h5>
                                 </div>
                                 <div class="modal-body">
                                     <h5>{{errorMessage}}</h5>
                                 </div>
                                 <div class="modal-footer">
-                                    <button class="btn btn-outline-secondary" ng-click="closeErrorModal()">Close</button>
+                                    <button class="btn btn-outline-secondary" ng-click="closeErrorModal()">Zamknij</button>
                                 </div>
                             </div>
                         </div>
@@ -98,7 +98,7 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title">Please check before continuing!</h5>
+                                        <h5 class="modal-title">Sprawdź przed kontunuacją!</h5>
                                     </div>
                                     <div class="modal-body">
 
@@ -113,32 +113,25 @@
                                                     <img class="d-block image" src="{{macro.DirectoryName}}/{{warning.WarningImagePath}}"
                                                          alt="{{$index}} slide">
                                                     <div class="carousel-caption d-none d-md-block">
+                                                        <a class="carousel-control-prev" href="#{{macro.UniqueID}}warning" role="button" data-slide="prev" ng-if="macro.Warnings.WarningList.length>1">
+                                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                            <span class="sr-only">Poprzedni</span>
+                                                        </a>
                                                         <h5>{{warning.WarningText}}</h5>
+                                                        <a class="carousel-control-next" href="#{{macro.UniqueID}}warning" role="button" data-slide="next" ng-if="macro.Warnings.WarningList.length>1">
+                                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                            <span class="sr-only">Następny</span>
+                                                        </a>
                                                     </div>
-
-
                                                 </div>
 
                                             </div>
-                                            <a class="carousel-control-prev" href="#{{macro.UniqueID}}warning" role="button" data-slide="prev" ng-if="macro.Warnings.WarningList.length>1">
-                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                <span class="sr-only">Previous</span>
-                                            </a>
-                                            <a class="carousel-control-next" href="#{{macro.UniqueID}}warning" role="button" data-slide="next" ng-if="macro.Warnings.WarningList.length>1">
-                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                <span class="sr-only">Next</span>
-                                            </a>
                                         </div>
-
-                                        <!--<img class="d-block image" src="{{macro.DirectoryName}}/{{macro.Warning.WarningImagePath}}" />
-    <div class="carousel-caption d-none d-md-block">
-        <h5>{{macro.Warning.WarningText}}</h5>
-    </div>-->
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="runMacro(macro)" ng-if="!isRunAll && !isRunSelected">Done</button>
-                                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="runAllModal($index)" ng-if="isRunAll">Continue</button>
-                                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="continueRunSelected($index)" ng-if="isRunSelected">Continue</button>
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="runMacro(macro)" ng-if="!isRunAll && !isRunSelected">Zakończono</button>
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="runAllModal($index)" ng-if="isRunAll">Kontynuuj</button>
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="continueRunSelected($index)" ng-if="isRunSelected">Kontynuuj</button>
                                     </div>
                                 </div>
                             </div>
@@ -175,8 +168,8 @@
 
                                 <!-- Run macro button-->
                                 <div class="col-sm-12">
-                                    <button class="btn btn-outline-dark btn-block" ng-disabled="!catiaStarted" ng-click="runMacro(macro)" ng-if="macro.Warnings===null">Run Macro</button>
-                                    <button class="btn btn-outline-dark btn-block" ng-disabled="!catiaStarted" ng-click="showModal(macro)" ng-if="macro.Warnings!==null">Run Macro</button>
+                                    <button class="btn btn-outline-dark btn-block" ng-disabled="!catiaStarted" ng-click="runMacro(macro)" ng-if="macro.Warnings===null">Uruchom Makro</button>
+                                    <button class="btn btn-outline-dark btn-block" ng-disabled="!catiaStarted" ng-click="showModal(macro)" ng-if="macro.Warnings!==null">Uruchom Makro</button>
                                 </div>
 
                             </div>
@@ -199,21 +192,19 @@
                             <img class="d-block image" src="{{macro.DirectoryName}}/{{image.Path}}"
                                  alt="{{$index}} slide">
                             <div class="carousel-caption d-none d-md-block">
+                                <a class="carousel-control-prev" href="#{{macro.UniqueID}}images" role="button" data-slide="prev" ng-if="macro.ImagesModel.length>1">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Poprzedni</span>
+                                </a>
                                 <h5>{{image.Name}}</h5>
+                                <a class="carousel-control-next" href="#{{macro.UniqueID}}images" role="button" data-slide="next" ng-if="macro.ImagesModel.length>1">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Następny</span>
+                                </a>
                             </div>
-
-
                         </div>
 
                     </div>
-                    <a class="carousel-control-prev" href="#{{macro.UniqueID}}images" role="button" data-slide="prev" ng-if="macro.ImagesModel.length>1">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#{{macro.UniqueID}}images" role="button" data-slide="next" ng-if="macro.ImagesModel.length>1">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
                 </div>
             </div>
         </div>
