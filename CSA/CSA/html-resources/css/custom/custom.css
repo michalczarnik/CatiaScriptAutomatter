@@ -83,3 +83,7 @@ ol.carousel-indicators li.active {
     width: 85%;
     padding-left: 15%;
 }
+
+right-column h3 {
+    padding-top: 3px;
+}

@@ -31,13 +31,15 @@
                 <buton class="btn btn-outline-secondary" onclick="exposedClass.showDevTools()">Show Dev Tools</buton>
             </div>
             
-            <div class="col-sm-6">
-                <h2 class="pull-right" style="padding-left:5px;" ng-class="{green: catiaStarted, red:!catiaStarted}">{{catiaStarted?'ON':'OFF'}}</h2>
-                <h2 class="pull-right" style="padding-left:5px;">Status Catii:</h2>
-                <button type="button" class="btn btn-danger pull-right" onclick="exposedClass.largeWindow()">L</button>
-                <button type="button" class="btn btn-warning pull-right" onclick="exposedClass.mediumWindow()">M</button>
-                <button type="button" class="btn btn-info pull-right" onclick="exposedClass.smallWindow()">S</button>
-                <h2 class="pull-right">Wielkość:</h2>
+            <div class="col-sm-6 right-column">
+                <h3 class="pull-right" style="padding-left:5px;" ng-class="{green: catiaStarted, red:!catiaStarted}">{{catiaStarted?'ON':'OFF'}}</h3>
+                <h3 class="pull-right" style="padding-left:5px;">Status Catii:</h3>
+                <div class="btn-group pull-right">
+                    <button type="button" class=" btn btn-secondary btn-danger" onclick="exposedClass.largeWindow()">L</button>
+                    <button type="button" class="btn btn-secondary btn-warning" onclick="exposedClass.mediumWindow()">M</button>
+                    <button type="button" class="btn btn-secondary btn-info" onclick="exposedClass.smallWindow()">S</button>
+                </div>
+                <h3 class="pull-right">Wielkość:</h3>
             </div>
         </div>
             
