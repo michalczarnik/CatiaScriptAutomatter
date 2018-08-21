@@ -53,6 +53,7 @@
                 $("#warning" + $scope.macros[currMacro].UniqueID).modal();
             } else if ($scope.macros[currMacro].Warnings !== null && $scope.macros[currMacro].Warnings.IsAfter == true){
                 let response = macroService.runMacro($scope.macros[currMacro].UniqueID, $scope.macros[currMacro].ParameterList);
+                $($scope.macros[currMacro].UniqueID + "input").collapse();
                 if (response) {
                     $scope.showError(response);
                     return;
@@ -60,6 +61,7 @@
                 $("#warning" + $scope.macros[currMacro].UniqueID).modal();
             }else {
                 let response = macroService.runMacro($scope.macros[currMacro].UniqueID, $scope.macros[currMacro].ParameterList);
+                $($scope.macros[currMacro].UniqueID+"input").collapse();
                 if (response) {
                     $scope.showError(response);
                     return;
@@ -69,7 +71,7 @@
         } else {
             $scope.isRunSelected = false;
             $("#runSelected").modal("hide");
-            alert("All selected scripts are finished!");
+            alert("Wszystkie wybrane skrypty zakońćzone!");
         }
     }
 
@@ -77,6 +79,7 @@
         var macro = $scope.macros[index];
         if (macro.Warnings.IsAfter != true) {
             let response = macroService.runMacro(macro.UniqueID, macro.ParameterList);
+            $(macro.UniqueID + "input").collapse();
             if (response) {
                 $scope.showError(response);
                 return;
@@ -98,6 +101,7 @@
                 $("#warning" + $scope.macros[index].UniqueID).modal();
             } else if ($scope.macros[index].Warnings !== null && $scope.macros[index].Warnings.IsAfter == true) {
                 let response = macroService.runMacro($scope.macros[index].UniqueID, $scope.macros[index].ParameterList);
+                $($scope.macros[index].UniqueID + "input").collapse();
                 if (response) {
                     $scope.showError(response);
                     return;
@@ -105,6 +109,7 @@
                 $("#warning" + $scope.macros[index].UniqueID).modal();
             } else {
                 let response = macroService.runMacro($scope.macros[index].UniqueID, $scope.macros[index].ParameterList);
+                $($scope.macros[index].UniqueID + "input").collapse();
                 if (response) {
                     $scope.showError(response);
                     return;
@@ -114,7 +119,7 @@
         } else {
             $scope.isRunAll = false;
             $scope.currentMacro = "";
-            alert("All selected scripts are finished!");
+            alert("Wszystkie skrypty zakończone!");
         }
     }
 
@@ -123,6 +128,7 @@
             var macro = $scope.macros[index];
             if (macro.Warnings.IsAfter != true) {
                 let response = macroService.runMacro($scope.macros[index].UniqueID, $scope.macros[index].ParameterList);
+                $($scope.macros[index].UniqueID + "input").collapse();
                 if (response) {
                     $scope.showError(response);
                     return;
@@ -184,7 +190,7 @@
         }
         $("#warning" + macro.UniqueID).modal();
         if (macro.Warnings !=null && macro.Warnings.IsAfter) 
-            alert("Selected script is finished!");
+            alert("Wybrany skrypt zakończony!");
 
     }
 
@@ -207,8 +213,7 @@
                 return;
             }
             if (macroInformation.Warnings==null)
-                alert("Selected script is finished!");
-        }
+                alert("Wybrany skrypt zakończony!");        }
     }
 
     $scope.selectFile = function (macroIndex, paramIndex) {
