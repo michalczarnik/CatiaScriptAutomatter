@@ -218,6 +218,7 @@
 
                                 <!-- Run macro button-->
                                 <div class="col-sm-12">
+                                    <button class="btn btn-outline-dark btn-block" ng-disabled="!catiaStarted" ng-click="runMacrosUpTo($index)">Uruchom aż do tego Makro</button>
                                     <button class="btn btn-outline-dark btn-block" ng-disabled="!catiaStarted" ng-click="runMacro(macro)" ng-if="macro.Warnings===null">Uruchom Makro</button>
                                     <button class="btn btn-outline-dark btn-block" ng-disabled="!catiaStarted" ng-click="showModal(macro)" ng-if="macro.Warnings!==null">Uruchom Makro</button>
                                 </div>

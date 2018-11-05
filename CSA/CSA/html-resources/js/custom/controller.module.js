@@ -50,6 +50,14 @@
         }
     };
 
+    $scope.runMacrosUpTo = function (index) {
+        for (var j = 0; j <= index; j++) {
+            var macro = $scope.macros[j];
+            macro.isSelected = true;
+        }
+        $scope.startRunSelected(true);
+    };
+
     $scope.startRunSelected = function (isFirstRun) {
         if (isFirstRun) {
             $("#runSelected").modal("hide");
