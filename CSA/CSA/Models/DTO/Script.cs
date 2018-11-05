@@ -60,7 +60,7 @@ namespace CSA.Models.DTO
     }
 
     [XmlRoot(ElementName = "script")]
-    public class Script
+    public class Folders
     {
         [XmlElement(ElementName = "scriptName")]
         public string ScriptName { get; set; }

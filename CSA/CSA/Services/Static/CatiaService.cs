@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 
 namespace CSA.Services.Static
 {
-    class CatiaService
+    static class CatiaService
     {
         static private INFITF.Application _catia = null;
         static private string _applicationName = "CATIA.Application";

@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\AutoMapperProfile.cs" />
+    <Compile Include="Configuration\FolderConfigurationReader.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ExposedClass.cs" />
     <Compile Include="Forms\BrowserForm.cs">
@@ -77,6 +78,7 @@
     </Compile>
     <Compile Include="Helpers\ExtensionHelper.cs" />
     <Compile Include="Helpers\UniqueIdentifierHelper.cs" />
+    <Compile Include="Models\DTO\Configuration.cs" />
     <Compile Include="Models\DTO\Script.cs" />
     <Compile Include="Models\MacroModel.cs" />
     <Compile Include="Models\ParameterModel.cs" />

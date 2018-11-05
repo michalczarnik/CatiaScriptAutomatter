@@ -16,12 +16,12 @@ namespace CSA.Services.Implementations
             return macroModel;
         }
 
-        private Script GetSerializedData(string path)
+        private Folders GetSerializedData(string path)
         {
-            var xmlSerializer = new XmlSerializer(typeof(Script));
+            var xmlSerializer = new XmlSerializer(typeof(Folders));
             using(var reader = new StreamReader(path))
             {
-                return (Script)xmlSerializer.Deserialize(reader);
+                return (Folders)xmlSerializer.Deserialize(reader);
             }
         }
     }

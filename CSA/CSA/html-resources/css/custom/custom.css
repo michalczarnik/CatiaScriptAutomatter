@@ -13,8 +13,10 @@ body {
 
 .image {
     object-fit: contain;
-    height: 85%;
+    height: 80%;
     width: 100%;
+    max-height: calc(100vh - 300px);
+    max-width: 100%;
 }
 
 ol.carousel-indicators li {
@@ -68,10 +70,19 @@ ol.carousel-indicators li.active {
     background-color: #343a40;
 }
 
-.warning-modal .modal-dialog{
-    max-width:85%!important;
+.warning-modal .modal-dialog {
+    max-width: 85% !important;
+    width: 100%;
+    height: 90%;
+}
+.warning-modal .modal-dialog .modal-conent{
+    height: 100%;
+    width: 100%;
 }
 
+.warning-modal .modal-dialog .modal-conent {
+    height:83%;
+}
 .carousel-caption {
     position: relative;
     left: auto;
@@ -82,6 +93,7 @@ ol.carousel-indicators li.active {
 .carousel-caption h5 {
     width: 85%;
     padding-left: 15%;
+    position: initial
 }
 
 right-column h3 {

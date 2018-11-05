@@ -38,7 +38,7 @@ namespace CSA.Helpers
             }
         }
 
-        public static double TryParseParameter(this object value)
+        private static double TryParseParameter(this object value)
         {
             var tempValue = value.ToString().Trim();
             tempValue = tempValue.Replace(".", ",");

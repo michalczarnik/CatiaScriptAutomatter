@@ -2,6 +2,7 @@
 {
     public static class Constants
     {
+        public const string RepositoriesPath = "repos.xml";
         public const string MacroFilePatternXml = @"([^\\]*\.xml$)";
         public const string MacroFilePatternScript = @"([^\\]*\.CATScript$)";
         public const string MacroScriptPattern = @"Sub CATMain\((.*)\)";

@@ -19,7 +19,7 @@ namespace CSA.Configuration
 
         private static void CreateMaps(this IMapperConfigurationExpression cfg)
         {
-            cfg.CreateMap<Script, MacroModel>()
+            cfg.CreateMap<Folders, MacroModel>()
                 .ForMember(d => d.FileName, s => s.MapFrom(x => x.ScriptName))
                 .ForMember(d => d.Description, s => s.MapFrom(x => x.ScriptDescription))
                 .ForMember(d => d.ParameterList, s => s.MapFrom(x => x.Parameters.Parameter))
@@ -44,6 +44,9 @@ namespace CSA.Configuration
 
         private static Dictionary<string, string> CreateDictionaryFromImages(this Images images)
         {
+            /*
+             *
+             */
             if (images == null)
                 return null;
             var dict = new Dictionary<string, string>();
@@ -54,7 +57,7 @@ namespace CSA.Configuration
             return dict;
         }
 
-        public static Models.Warnings Convert(this Models.DTO.Warnings warnings)
+        private static Models.Warnings Convert(this Models.DTO.Warnings warnings)
         {
             if (warnings != null && warnings.Warning!=null & warnings.Warning.Any())
             {

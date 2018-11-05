@@ -25,7 +25,7 @@
         <!-- Header -->
         <div class="row" style="top:1%;">
             <div class="col-sm-6">
-                <button class="btn btn-outline-secondary" ng-click="loadMacros()">Załaduj makra</button>
+                <button class="btn btn-outline-secondary" ng-click="showSelectRepositoryModal()">Otwórz foldery</button>
                 <button class="btn btn-outline-secondary" ng-disabled="!catiaStarted || macros.length==0" ng-click="runAll(0)">Uruchom wszystkie makra</button>
                 <button class="btn btn-outline-secondary" ng-disabled="!catiaStarted && macros.length==0" ng-click="showRunSelectedModal()">Urucham wybrane makra</button>
                 <buton class="btn btn-outline-secondary" onclick="exposedClass.showDevTools()">Show Dev Tools</buton>
@@ -47,9 +47,55 @@
 
         <!-- Body -->
         <div class="row" style="height:94%">
-            <div class="col-sm-4" style="height: 100%; overflow-y: scroll;">
+            <div class="col-sm-4" style="height: 94%; overflow-y: scroll;">
 
                 <div class="accordion">
+                    <!-- Select Repository Modal -->
+                    <div class="modal fade warning-modal" id="selectRepository" tabindex="-1" role="dialog" aria-labelledby="Warning" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Wybierz folder z którego wczytać makra!</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Ścieżka</th>
+                                                <th>Domyślne</th>
+                                                <th></th>
+                                                <th></th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="repository in repositories">
+                                                <td>
+                                                    {{repository.Path}}
+                                                </td>
+                                                <td>
+                                                    {{repository.IsDefault ? 'TAK' : 'NIE'}}
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-outline-secondary" ng-click="loadMacros(repository.Path)">Wybierz folder</button>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-outline-secondary" ng-click="setAsDefault(repository.Path)">Ustaw jako domyślny</button>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-outline-secondary" ng-click="deleteFolder(repository.Path)">Usuń folder</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-outline-secondary" ng-click="addFolder()">Dodaj folder</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Run Selected Modal-->
                     <div class="modal fade" id="runSelected" tabindex="-1" role="dialog" aria-labelledby="Warning" aria-hidden="true">
                         <div class="modal-dialog" role="document">
@@ -112,8 +158,10 @@
                                             <div class="carousel-inner h-100">
 
                                                 <div class="carousel-item h-100" ng-class="{active: $index==0}" ng-repeat="warning in macro.Warnings.WarningList">
-                                                    <img class="d-block image" src="{{macro.DirectoryName}}/{{warning.WarningImagePath}}"
-                                                         alt="{{$index}} slide">
+                                                    <div>
+                                                        <img class="d-block image" src="{{macro.DirectoryName}}/{{warning.WarningImagePath}}"
+                                                             alt="{{$index}} slide">
+                                                    </div>
                                                     <div class="carousel-caption d-none d-md-block">
                                                         <a class="carousel-control-prev" href="#{{macro.UniqueID}}warning" role="button" data-slide="prev" ng-if="macro.Warnings.WarningList.length>1">
                                                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>

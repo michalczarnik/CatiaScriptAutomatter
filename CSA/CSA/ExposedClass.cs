@@ -33,18 +33,23 @@ namespace CSA
             return CatiaService.CatiaExists();
         }
 
-        public string loadMacros(bool isXml = true)
+        public string loadMacros(string path,bool isXml = true)
         {
-            WinFormsService.OpenFolderDialog();
-            if (string.IsNullOrWhiteSpace(WinFormsService.PathToDirectory))
+            if (string.IsNullOrWhiteSpace(path))
                 return null;
-            FileService.PopulateMacros(WinFormsService.PathToDirectory, isXml);
+            FileService.PopulateMacros(path, isXml);
             return JsonConvert.SerializeObject(StaticMacroList.ListOfMacros);
         }
 
         public string openFile()
         {
             return WinFormsService.OpenFileDialog();
+        }
+
+        public string getFolderPath()
+        {
+            WinFormsService.OpenFolderDialog();
+            return WinFormsService.PathToDirectory;
         }
 
         public string runMacro(string responseModel)
@@ -89,6 +94,27 @@ namespace CSA
         public void SmallWindow()
         {
             WinFormsService.ChangeSize(Constants.ScreenSize.S);
+        }
+
+        public string LoadRepositories()
+        {
+            var repos = FileService.GetRepositories();
+            return JsonConvert.SerializeObject(repos.Folder);
+        }
+
+        public bool AddRepository(string path)
+        {
+            return FileService.AddRepository(path, false);
+        }
+
+        public void DeleteRepository(string path)
+        {
+            FileService.DeleteRepository(path);
+        }
+
+        public void ChangeToDefault(string path)
+        {
+            FileService.ChangeToDefault(path);
         }
     }
 }
